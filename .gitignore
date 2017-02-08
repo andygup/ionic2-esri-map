@@ -1,0 +1,11 @@
+*.json
+*.ico
+*.scss
+declarations.d.ts
+esriShim.ts
+/app
+/theme
+service-worker.js
+/pages/about
+/pages/contact
+/pages/tabs
