@@ -8,7 +8,7 @@ Prototype app demonstrating one approach for using Ionic2 with the ArcGIS API fo
 * Create an Ionic project. It can be either android or iOS
 
 ```
-	ionic install –g cordova ionic
+	npm install –g cordova ionic
 	ionic start --v2 testApp tabs
 	cd testApp
 	ionic platform add android 
