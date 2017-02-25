@@ -13,24 +13,55 @@ export class HomePage implements OnInit{
 
   @ViewChild('map') mapEl: ElementRef;
 
-  map: any;
-
   constructor(public navCtrl: NavController, private esriLoader: EsriLoaderService) { }
 
   ngOnInit() {
 
-    return this.esriLoader.load({
+    let latitude: number = 0, longitude: number = 0, map: any = null, MapPoint: any = null;
+
+    const options = {
+      enableHighAccuracy: true, // use any allowed location provider
+      timeout: 60000            // it can take quite a while for a cold GPS to warm up
+    };
+
+    // Demonstrates starting up geolocation before loading ArcGIS JS API
+    // You can also wait until after the map has loaded. It all depends
+    // on your requirements.
+
+    navigator.geolocation.watchPosition( position=> {
+
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        centerMap(latitude, longitude);
+
+      }, error => {
+        console.log("Watch error: " + error.code);
+      }, options
+    );
+
+    this.esriLoader.load({
       url: 'https://js.arcgis.com/3.19/'
     }).then(() => {
 
-      return this.esriLoader.loadModules(['esri/map']).then(([Map]) => {
+      this.esriLoader.loadModules(['esri/map', 'esri/geometry/Point']).then(([Map, Point]) => {
         // create the map at the DOM element in this component
-        const map = new Map(this.mapEl.nativeElement, {
+        map = new Map(this.mapEl.nativeElement, {
           center: [-118, 34.5],
           zoom: 8,
           basemap: "topo"
         });
+
+        MapPoint = Point;
+
       });
     });
+
+    function centerMap(lat, lon) {
+      if(map != null) {
+        console.log("Centering map: " + lat + ", " + lon);
+        map.centerAt(MapPoint(lon, lat));
+      }
+    }
   }
 }
