@@ -28,7 +28,7 @@ export class HomePage implements OnInit{
     // You can also wait until after the map has loaded. It all depends
     // on your requirements.
 
-    navigator.geolocation.watchPosition( position=> {
+    let watchId = navigator.geolocation.watchPosition( position=> {
 
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
@@ -54,9 +54,16 @@ export class HomePage implements OnInit{
 
         MapPoint = Point;
 
+        // Shut off geolocation when user zooms.
+        map.on("zoom-end",function(){
+          navigator.geolocation.clearWatch(watchId);
+          console.log("Geolocation stopped.");
+        });
+
       });
     });
 
+    // Keep centering the map until we shut off geolocation
     function centerMap(lat, lon) {
       if(map != null) {
         console.log("Centering map: " + lat + ", " + lon);
