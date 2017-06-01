@@ -2,7 +2,7 @@ import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { EsriLoaderService } from 'angular2-esri-loader';
+import { EsriLoaderService } from 'angular-esri-loader';
 
 @Component({
   selector: 'page-home',
