@@ -41,7 +41,7 @@ export class HomePage implements OnInit{
     );
 
     this.esriLoader.load({
-      url: 'https://js.arcgis.com/3.19/'
+      url: 'https://js.arcgis.com/3.20/'
     }).then(() => {
 
       this.esriLoader.loadModules(['esri/map', 'esri/geometry/Point']).then(([Map, Point]) => {
