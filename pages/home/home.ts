@@ -1,86 +1,87 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
-import { EsriLoaderService } from 'angular-esri-loader';
+import { loadModules } from 'esri-loader';
 
 @Component({
     selector: 'page-home',
-    templateUrl: 'home.html',
-    providers: [ EsriLoaderService ]
+    templateUrl: 'home.html'
 })
 export class HomePage implements OnInit{
 
     @ViewChild('map') mapEl: ElementRef;
+    mapView:any = null;
 
-    constructor(public navCtrl: NavController, private esriLoader: EsriLoaderService) { }
+    constructor(public platform: Platform) { }
+
+    async  getGeo() {
+
+      // Reference: https://ionicframework.com/docs/api/platform/Platform/#ready
+      await this.platform.ready();
+
+      let latitude: number = 0, longitude: number = 0;
+
+      const options = {
+        enableHighAccuracy: true, // use any allowed location provider
+        timeout: 60000            // it can take quite a while for a cold GPS to warm up
+      };
+
+      navigator.geolocation.watchPosition( position=> {
+
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
+
+          // Center map after it has been initialized
+          if(this.mapView != null) {
+            console.log("Centering map: " + latitude + ", " + longitude);
+            this.mapView.center = [longitude, latitude];
+          }
+
+        }, error => {
+
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              console.error("User denied the request for Geolocation.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              console.error("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              console.error("The request to get user location timed out.");
+              alert("Unable to start geolocation. Check application settings.");
+              break;
+          }
+        }, options
+      );
+    }
 
     ngOnInit() {
+      this.getGeo();
 
-        let latitude: number = 0, longitude: number = 0, map: any = null, MapPoint: any = null;
+      // Load the mapping API modules
+      return loadModules([
+        'esri/Map',
+        'esri/views/MapView'
+      ]).then(([Map, MapView]) => {
 
-        const options = {
-            enableHighAccuracy: true, // use any allowed location provider
-            timeout: 60000            // it can take quite a while for a cold GPS to warm up
-        };
+        console.log("Geo: starting map");
 
-        // Demonstrates starting up geolocation before loading ArcGIS JS API
-        // You can also wait until after the map has loaded. It all depends
-        // on your requirements.
-
-        let watchId = navigator.geolocation.watchPosition( position=> {
-
-                latitude = position.coords.latitude;
-                longitude = position.coords.longitude;
-
-                centerMap(latitude, longitude);
-
-            }, error => {
-
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        console.error("User denied the request for Geolocation.");
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        console.error("Location information is unavailable.");
-                        break;
-                    case error.TIMEOUT:
-                        console.error("The request to get user location timed out.");
-                        alert("Unable to start geolocation. Check application settings.");
-                        break;
-                }
-            }, options
-        );
-
-        this.esriLoader.load({
-            url: 'https://js.arcgis.com/3.22/'
-        }).then(() => {
-
-            this.esriLoader.loadModules(['esri/map', 'esri/geometry/Point']).then(([Map, Point]) => {
-                // create the map at the DOM element in this component
-                map = new Map(this.mapEl.nativeElement, {
-                    center: [-118, 34.5],
-                    zoom: 12,
-                    basemap: "topo"
-                });
-
-                MapPoint = Point;
-
-                // Shut off geolocation when user zooms.
-                map.on("zoom-end",function(){
-                    navigator.geolocation.clearWatch(watchId);
-                    console.log("Geolocation stopped.");
-                });
-
-            });
+        let map = new Map({
+          basemap: 'hybrid'
         });
 
-        // Keep centering the map until we shut off geolocation
-        function centerMap(lat, lon) {
-            if(map != null) {
-                console.log("Centering map: " + lat + ", " + lon);
-                map.centerAt(MapPoint(lon, lat));
-            }
-        }
+        this.mapView = new MapView({
+          // create the map view at the DOM element in this component
+          container: this.mapEl.nativeElement,
+          center: [-12.287, -37.114],
+          zoom: 12,
+          map: map
+        });
+
+      })
+      .catch(err => {
+        console.log("ArcGIS: " + err);
+      });
     }
 }
