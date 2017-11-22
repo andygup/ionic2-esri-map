@@ -54,10 +54,6 @@ export class HomePage implements OnInit{
           }
         }, options
       );
-    }
-
-    ngOnInit() {
-      this.getGeo();
 
       // Load the mapping API modules
       return loadModules([
@@ -80,8 +76,12 @@ export class HomePage implements OnInit{
         });
 
       })
-      .catch(err => {
-        console.log("ArcGIS: " + err);
-      });
+        .catch(err => {
+          console.log("ArcGIS: " + err);
+        });
+    }
+
+    ngOnInit() {
+      this.getGeo();
     }
 }
