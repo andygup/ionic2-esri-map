@@ -2,6 +2,8 @@
 
 Prototype app demonstrating one approach for using Ionic (v3+) with the ArcGIS API for JavaScript.
 
+For a more complete Angular sample you should also check out: https://github.com/Esri/angular-cli-esri-map
+
 # How to install
 
 * Clone or download this repo
@@ -30,12 +32,12 @@ roots directory. If you don't get a web page launch then look for errors, someth
 
 # Notes
 * Last tested using
-  - Ionic 3.19.0, 
-  - Angular Core 5.0.3, 
-  - Cordova 7.1.0, 
+  - Ionic 3.20.0, 
+  - Angular Core 5.2.11, 
+  - Cordova 8.0.0, 
   - Cordova android 7.0.0,
   - Device OS: Android 8.1.0,
-  - esri-loader: 2.0.0 
+  - esri-loader: 2.4.0 
 * Not getting a location result in Android - do the following steps:
 	* If you are using Android Studio look for errors in Android Monitor. You may have also gotten an application alert box when the `watchPosition()` request timed out.
 	* Add these permissions to the `AndroidManifest.xml file`. You can find it under `/<your_project_directory>/platforms/android/`:
