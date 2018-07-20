@@ -24,9 +24,9 @@ export class HomePage implements OnInit{
         'esri/Map',
         'esri/views/MapView'
       ])
-        .catch(err => {
-          console.error("ArcGIS: ", err);
-        });
+      .catch(err => {
+        console.error("ArcGIS: ", err);
+      });
 
       console.log("Starting up ArcGIS map");
 
