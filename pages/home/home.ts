@@ -20,30 +20,27 @@ export class HomePage implements OnInit{
       // Reference: https://ionicframework.com/docs/api/platform/Platform/#ready
       await this.platform.ready();
 
-      // Load the mapping API modules
-      return loadModules([
+      const [Map, MapView]:any = await loadModules([
         'esri/Map',
         'esri/views/MapView'
-      ]).then(([Map, MapView]) => {
-
-        console.log("Geo: starting map");
-
-        let map = new Map({
-          basemap: 'hybrid'
-        });
-
-        this.mapView = new MapView({
-          // create the map view at the DOM element in this component
-          container: this.mapEl.nativeElement,
-          center: [-12.287, -37.114],
-          zoom: 12,
-          map: map
-        });
-
-      })
+      ])
         .catch(err => {
-          console.log("ArcGIS: " + err);
-        });
+          console.error("ArcGIS: ", err);
+        });;
+
+      console.log("Starting up ArcGIS map");
+
+      let map = new Map({
+        basemap: 'hybrid'
+      });
+
+      let mapView = new MapView({
+        // create the map view at the DOM element in this component
+        container: this.mapEl.nativeElement,
+        center: [-12.287, -37.114],
+        zoom: 12,
+        map: map
+      });
     }
 
     ngOnInit() {
