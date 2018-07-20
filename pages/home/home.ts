@@ -19,6 +19,7 @@ export class HomePage implements OnInit{
       // Reference: https://ionicframework.com/docs/api/platform/Platform/#ready
       await this.platform.ready();
 
+      // Load the ArcGIS API for JavaScript modules
       const [Map, MapView]:any = await loadModules([
         'esri/Map',
         'esri/views/MapView'
