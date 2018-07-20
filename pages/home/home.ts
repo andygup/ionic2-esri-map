@@ -11,7 +11,6 @@ import { loadModules } from 'esri-loader';
 export class HomePage implements OnInit{
 
     @ViewChild('map') mapEl: ElementRef;
-    mapView:any = null;
 
     constructor(public platform: Platform) { }
 
@@ -26,7 +25,7 @@ export class HomePage implements OnInit{
       ])
         .catch(err => {
           console.error("ArcGIS: ", err);
-        });;
+        });
 
       console.log("Starting up ArcGIS map");
 
