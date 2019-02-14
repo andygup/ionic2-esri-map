@@ -1,6 +1,6 @@
 # ionic2-esri-map
 
-Prototype app demonstrating one approach for using Ionic (v3+) with the ArcGIS API for JavaScript.
+Prototype app demonstrating one approach for using Ionic (v4+) with the ArcGIS API for JavaScript.
 
 For a more complete Angular sample you should also check out: https://github.com/Esri/angular-cli-esri-map
 
@@ -13,7 +13,7 @@ For a more complete Angular sample you should also check out: https://github.com
 	npm install -g ionic
 	ionic start testApp tabs
 	cd testApp
-  ionic cordova prepare android
+    ionic cordova prepare android
 	npm install esri-loader
 ```
 
